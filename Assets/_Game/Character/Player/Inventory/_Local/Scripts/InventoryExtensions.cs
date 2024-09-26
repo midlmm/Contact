@@ -64,9 +64,9 @@ public static class InventoryExtensions
         var size = inventory.Size;
         var rowLenght = size.x;
 
-        for (int x = 0; x < size.x; x++)
+        for (int y = 0; y < size.y; y++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < size.x; x++)
             {
                 var slotCoordinates = new Vector2Int(x, y);
                 var slot = inventory.Slots[slotCoordinates.x + rowLenght * slotCoordinates.y];
@@ -140,9 +140,9 @@ public static class InventoryExtensions
         var rowLenght = size.x;
         remainingCount = count;
 
-        for (int x = 0; x < size.x; x++)
+        for (int y = 0; y < size.y; y++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < size.x; x++)
             {
                 var coordinates = new Vector2Int(x, y);
                 var slot = inventory.Slots[coordinates.x + rowLenght * coordinates.y];
@@ -188,9 +188,9 @@ public static class InventoryExtensions
         var rowLenght = size.x;
         remainingCount = count;
 
-        for (int x = 0; x < size.x; x++)
+        for (int y = 0; y < size.y; y++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < size.x; x++)
             {
                 var coordinates = new Vector2Int(x, y);
                 var slot = inventory.Slots[coordinates.x + rowLenght * coordinates.y];
@@ -238,9 +238,9 @@ public static class InventoryExtensions
         var size = inventory.Size;
         var rowLenght = size.x;
 
-        for (int x = 0; x < size.x; x++)
+        for (int y = 0; y < size.y; y++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < size.x; x++)
             {
                 var slotCoordinates = new Vector2Int(x, y);
                 var checkingSlot = inventory.Slots[slotCoordinates.x + rowLenght * slotCoordinates.y];

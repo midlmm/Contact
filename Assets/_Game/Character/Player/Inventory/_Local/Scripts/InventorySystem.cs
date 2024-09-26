@@ -1,13 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InventorySystem : MonoBehaviour
 {
-    [SerializeField] private ItemsData _itemsData;
+    [SerializeField] private ItemsCollectionData _itemsCollectionData;
 
-    [SerializeField] private GameObject _prefabInventorySlotView;
+    [SerializeField] private InventorySlotView _prefabInventorySlotView;
     [SerializeField] private Transform _content;
     [SerializeField] private InventoryItem _inventoryItem;
 
@@ -27,8 +26,8 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) _inventory.Add(_itemsData.ItemsConfigs[0], Random.Range(1,4));
-        if (Input.GetKeyDown(KeyCode.Alpha2)) _inventory.Add(_itemsData.ItemsConfigs[1], Random.Range(1,7));
+        if (Input.GetKeyDown(KeyCode.Alpha1)) _inventory.Add(_itemsCollectionData.ItemDatas[0].ItemsConfig, Random.Range(1,4));
+        if (Input.GetKeyDown(KeyCode.Alpha2)) _inventory.Add(_itemsCollectionData.ItemDatas[1].ItemsConfig, Random.Range(1,7));
     }
 
     private void CreateInventorySlots()
@@ -37,55 +36,74 @@ public class InventorySystem : MonoBehaviour
 
         foreach (var slot in inventorySlots)
         {
-            var inventorySlotView = Instantiate(_prefabInventorySlotView, _content).GetComponent<InventorySlotView>();
+            var inventorySlotView = Instantiate(_prefabInventorySlotView, _content);
             var inventorySlotPresent = new InventorySlotPresent(inventorySlotView, slot, _inventoryItem);
 
+            inventorySlotPresent.Initialization();
             inventorySlotPresent.OnDropped += Drop;
 
             _inventorySlotPresents.Add(inventorySlotPresent);
         }
     }
 
-    private void Drop(InventorySlot at, InventorySlot to, bool isLeftDrag)
+    private void Drop(InventorySlot at, InventorySlot to, PointerEventData.InputButton inputButton)
     {
-        var newAt = new InventorySlot { ItemConfig = at.ItemConfig, Count = at.Count };
+        var newAt = new InventorySlot { ItemConfig = _inventoryItem.InventorySlot.ItemConfig, Count = _inventoryItem.InventorySlot.Count };
         var newTo = new InventorySlot { ItemConfig = to.ItemConfig, Count = to.Count };
 
-        if(isLeftDrag)
+        var isLeftDrag = false;
+
+        switch (inputButton)
         {
-            if (to.Count > 0 && at.ItemConfig == to.ItemConfig)
+            case PointerEventData.InputButton.Left:
+                isLeftDrag = true;
+                break;
+            case PointerEventData.InputButton.Right:
+                isLeftDrag = false;
+                break;
+            case PointerEventData.InputButton.Middle:
+                isLeftDrag = true;
+                break;
+            default:
+                isLeftDrag = true;
+                break;
+        }
+
+        if (isLeftDrag) // if dragging a left mouse button
+        {
+            if (to.Count > 0 && at.ItemConfig == to.ItemConfig) // if next slot is not empty and items type are equal
             {
                 _inventory.Remove(at.GetSlotCoordinates(_inventory), at.ItemConfig, at.Count, false);
                 _inventory.Remove(to.GetSlotCoordinates(_inventory), to.ItemConfig, to.Count, false);
                 _inventory.Add(to.GetSlotCoordinates(_inventory), newAt.ItemConfig, newAt.Count + newTo.Count);
             }
-            else if (to.Count > 0 && at.ItemConfig != to.ItemConfig)
+            else if (to.Count > 0 && at.ItemConfig != to.ItemConfig) // if next slot is not empty but types are different
             {
                 _inventory.Remove(at.GetSlotCoordinates(_inventory), at.ItemConfig, at.Count, false);
                 _inventory.Remove(to.GetSlotCoordinates(_inventory), to.ItemConfig, to.Count, false);
                 _inventory.Add(to.GetSlotCoordinates(_inventory), newAt.ItemConfig, newAt.Count);
-                _inventory.Add(at.GetSlotCoordinates(_inventory), newTo.ItemConfig, newTo.Count);
+                _inventory.Add(at.GetSlotCoordinates(_inventory), to.ItemConfig, newTo.Count);
             }
-            else if (to.Count == 0)
+            else if (to.Count == 0) // if next is empty
             {
                 _inventory.Remove(at.GetSlotCoordinates(_inventory), at.ItemConfig, at.Count, false);
                 _inventory.Add(to.GetSlotCoordinates(_inventory), newAt.ItemConfig, newAt.Count);
             }
         }
-        else
+        else // if dragging a right mouse button
         {
-            if (to.Count > 0 && at.ItemConfig == to.ItemConfig)
+            if (to.Count > 0 && at.ItemConfig == to.ItemConfig) // if next slot is not empty and items type are equal
             {
                 _inventory.Remove(to.GetSlotCoordinates(_inventory), to.ItemConfig, to.Count, false);
                 _inventory.Add(to.GetSlotCoordinates(_inventory), newAt.ItemConfig, newAt.Count + newTo.Count);
             }
-            else if (to.Count > 0 && at.ItemConfig != to.ItemConfig)
+            else if (to.Count > 0 && at.ItemConfig != to.ItemConfig) // if next slot is not empty but types are different
             {
                 _inventory.Remove(to.GetSlotCoordinates(_inventory), to.ItemConfig, to.Count, false);
                 _inventory.Add(to.GetSlotCoordinates(_inventory), newAt.ItemConfig, newAt.Count);
-                _inventory.Add(newTo.ItemConfig, newTo.Count);
+                _inventory.Add(to.ItemConfig, to.Count);
             }
-            else if (to.Count == 0)
+            else if (to.Count == 0) // if next is empty
             {
                 _inventory.Add(to.GetSlotCoordinates(_inventory), newAt.ItemConfig, newAt.Count);
             }

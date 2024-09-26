@@ -1,26 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InventoryItem : MonoBehaviour
 {
     public InventorySlot InventorySlot => _inventorySlot;
-    public bool IsLeftDrag => _isLeftDrag;
+    public PointerEventData.InputButton InputButton { get; private set; }
 
     [SerializeField] private InventoryItemView _inventoryItemView;
     [SerializeField] private CanvasGroup _canvasGroup;
 
     private InventorySlot _inventorySlot;
-    private bool _isLeftDrag;
 
-    public void Initialized(InventorySlot inventorySlot, bool isLeftDrag)
+    public void Initialized(InventorySlot inventorySlot, PointerEventData.InputButton inputButton)
     {
+        InputButton = inputButton;
         _inventorySlot = inventorySlot;
-        _isLeftDrag = isLeftDrag;
 
-        var countText = "";
-        if (inventorySlot.Count > 1) countText = inventorySlot.Count.ToString(); 
-        _inventoryItemView.DisplayInfo(inventorySlot.ItemConfig.Sprite, countText);
+        _inventoryItemView.DisplayInfo(inventorySlot.ItemConfig.Sprite, inventorySlot.Count);
     }
 
     public void SetAlpha(float alpha)

@@ -5899,8 +5899,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06a9c87e447a5f14db9ef2f5c8ddca28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemsData: {fileID: 11400000, guid: 35d0d5b207c73cd43a13b587d7c269e8, type: 2}
-  _prefabInventorySlotView: {fileID: 166130705293341491, guid: c22830bea71aa3447a4b5b5ffbf2533e, type: 3}
+  _itemsCollectionData: {fileID: 11400000, guid: 7c0b4fbb2f3cddb4c9fbac4a2a9a1919, type: 2}
+  _prefabInventorySlotView: {fileID: 4065866758942826461, guid: c22830bea71aa3447a4b5b5ffbf2533e, type: 3}
   _content: {fileID: 1623588136}
   _inventoryItem: {fileID: 332327034}
 --- !u!23 &3670077013533782633

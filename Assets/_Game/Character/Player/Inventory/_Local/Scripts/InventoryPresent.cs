@@ -4,8 +4,5 @@ using UnityEngine;
 
 public class InventoryPresent : MonoBehaviour
 {
-    private InventorySlot _inventorySlot;
-    private InventoryPresent _inventoryPresent;
-
 
 }
