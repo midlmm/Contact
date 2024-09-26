@@ -9,7 +9,7 @@ public class Inventory
     public event Action<InventoryEventArguments> ItemRemoved;
     public event Action<ItemConfig, int> ItemDroped;
 
-    public List<InventorySlotConfig> Slots;
+    public List<InventorySlot> Slots;
     public Vector2Int Size;
 
     public Inventory(InventoryConfig inventoryConfig)
@@ -17,10 +17,13 @@ public class Inventory
         Size = inventoryConfig.InventorySize;
 
         var size = Size;
-        Slots = new List<InventorySlotConfig>(size.x * size.y);
+        Slots = new List<InventorySlot>(size.x * size.y);
+
         for (int i = 0; i < Size.x * Size.y; i++)
         {
-            Slots.Add(new InventorySlotConfig());
+            var slot = new InventorySlot();
+            slot.ItemConfig = new ItemConfig();
+            Slots.Add(slot);
         }
     }
     public void InvokeItemAdded(InventoryEventArguments inventoryEventArguments)

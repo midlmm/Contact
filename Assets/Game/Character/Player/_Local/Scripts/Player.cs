@@ -19,8 +19,8 @@ public class Player : MonoBehaviour
         _playerMovementsInput = new PlayerMovementsInput();
         PlayerMovements = new CharacterMovements(_playerMovementsInput, _playerTransform);
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
     private void Update()

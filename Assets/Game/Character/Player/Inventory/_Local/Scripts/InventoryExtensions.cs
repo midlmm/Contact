@@ -39,10 +39,9 @@ public static class InventoryExtensions
         if (newValue > slot.ItemConfig.Stack)
         {
             var remainigItems = newValue - slot.ItemConfig.Stack;
-            var itemsToAddCount = slot.ItemConfig.Stack - slot.Count;
             slot.Count = slot.ItemConfig.Stack;
 
-            inventory.InvokeItemAdded(new InventoryEventArguments(itemConfig, itemsToAddCount, slotCoordinates));
+            inventory.InvokeItemAdded(new InventoryEventArguments(itemConfig, slot.ItemConfig.Stack, slotCoordinates));
 
             inventory.Add(itemConfig, remainigItems);
         }
@@ -107,12 +106,12 @@ public static class InventoryExtensions
 
         slot.Count -= count;
 
-        if (slot.Count == 0)
+        if (slot.Count <= 0)
         {
             slot.Clean();
         }
 
-        inventory.InvokeItemRemoved(new InventoryEventArguments(itemConfig, count, slotCoordinates));
+        inventory.InvokeItemRemoved(new InventoryEventArguments(slot.ItemConfig, slot.Count, slotCoordinates));
 
         if (invokeDrop)
         {
@@ -225,14 +224,34 @@ public static class InventoryExtensions
         }
     }
 
-    public static bool IsEmpty(this InventorySlotConfig slot)
+    public static bool IsEmpty(this InventorySlot slot)
     {
         return slot.Count <= 0 || slot.ItemConfig == null;
     }
-    public static void Clean(this InventorySlotConfig slot)
+    public static void Clean(this InventorySlot slot)
     {
         slot.Count = 0;
-        slot.ItemConfig = null;
+        slot.ItemConfig = new ItemConfig();
     }
+    public static Vector2Int GetSlotCoordinates(this InventorySlot slot, Inventory inventory)
+    {
+        var size = inventory.Size;
+        var rowLenght = size.x;
 
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                var slotCoordinates = new Vector2Int(x, y);
+                var checkingSlot = inventory.Slots[slotCoordinates.x + rowLenght * slotCoordinates.y];
+
+                if(checkingSlot == slot)
+                {
+                    return slotCoordinates;
+                }
+            }
+        }
+
+        return new Vector2Int();
+    }
 }

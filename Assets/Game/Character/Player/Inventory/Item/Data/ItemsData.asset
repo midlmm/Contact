@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: ItemsData
   m_EditorClassIdentifier: 
   _itemConfigs:
-  - Name: 
-    Sprite: {fileID: 0}
-    Price: 0
-    Stack: 0
+  - Name: aefaef3
+    Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    Price: 214
+    Stack: 42
+  - Name: esfasf
+    Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    Price: 67
+    Stack: 23
